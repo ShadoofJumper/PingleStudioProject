@@ -16,7 +16,8 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private SpeedParams _speed;
-
+    [SerializeField] private Animator _characterAnimator; 
+    
     private Rigidbody _characterRig;
     private Plane _virtualPlane;
     private float _currentSpeedMod;
@@ -26,28 +27,46 @@ public class PlayerMovement : MonoBehaviour
         _characterRig = GetComponent<Rigidbody>();
         _virtualPlane = new Plane(Vector3.up, new Vector3(0, transform.position.y, 0));
     }
-    
-    
-    
+
     private void FixedUpdate()
     {
-        //update move
-        if (Input.GetKey(KeyCode.LeftShift)) {
-            _currentSpeedMod = _speed.run;
-        }
-        else {
-            _currentSpeedMod = _speed.walk;
-        }
-        
-        Vector3 moveVelocity = _playerInput.Velocity * _currentSpeedMod * _currentSpeedMod * Time.fixedDeltaTime;
-        Vector3 newPos = _characterRig.transform.position + moveVelocity;
-        _characterRig.MovePosition(newPos);
-        //update rotation
+        UpdateMove();
+        UpdateRotation();
+    }
+
+    private void UpdateRotation()
+    {
         Vector3 lookPoint = GetLookPoint();
         Quaternion newRotateion = Quaternion.LookRotation(lookPoint);
         _characterRig.MoveRotation(newRotateion);
     }
+    
+    private void UpdateMove()
+    {
+        if (Input.GetKey(KeyCode.LeftShift)) 
+            _currentSpeedMod = _speed.run;
+        else
+            _currentSpeedMod = _speed.walk;
 
+        Vector3 moveVelocity = _playerInput.Velocity * _currentSpeedMod * Time.fixedDeltaTime;
+        Vector3 newPos = _characterRig.transform.position + moveVelocity;
+        _characterRig.MovePosition(newPos);
+
+        //update animation move
+        Vector3 pos         = _playerInput.Velocity * _currentSpeedMod / _speed.run;
+        Vector3 localPos    = _characterRig.transform.InverseTransformDirection(pos);
+        float objectSpeed   = pos.magnitude;
+
+        UpdateMoveAnim(objectSpeed, localPos);
+    }
+    
+    public void UpdateMoveAnim(float currentSpeed, Vector3 movePos)
+    {
+        _characterAnimator.SetFloat("Speed", currentSpeed);
+        _characterAnimator.SetFloat("PosX", movePos.x);
+        _characterAnimator.SetFloat("PosY", movePos.z);
+    }
+    
     private Vector3 GetLookPoint()
     {
         Vector3 pointToLook = new Vector3();
@@ -62,10 +81,5 @@ public class PlayerMovement : MonoBehaviour
         lookVector.y = 0.0f;
         return lookVector;
     }
-
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.magenta;
-    //    Gizmos.DrawSphere(__pointToLook,0.5f);
-    //}
+    
 }
