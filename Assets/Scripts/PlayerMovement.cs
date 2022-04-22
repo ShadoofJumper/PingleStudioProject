@@ -47,8 +47,8 @@ public class PlayerMovement : MonoBehaviour
             _currentSpeedMod = _speed.run;
         else
             _currentSpeedMod = _speed.walk;
-
-        Vector3 moveVelocity = _playerInput.Velocity * _currentSpeedMod * Time.fixedDeltaTime;
+        
+        Vector3 moveVelocity = _playerInput.RawVelocity * _currentSpeedMod * Time.fixedDeltaTime;
         Vector3 newPos = _characterRig.transform.position + moveVelocity;
         _characterRig.MovePosition(newPos);
 
@@ -57,11 +57,14 @@ public class PlayerMovement : MonoBehaviour
         Vector3 localPos    = _characterRig.transform.InverseTransformDirection(pos);
         float objectSpeed   = pos.magnitude;
 
-        UpdateMoveAnim(objectSpeed, localPos);
+        bool rawStopAnim = moveVelocity.magnitude < 0.1f;
+        UpdateMoveAnim(objectSpeed, localPos, rawStopAnim);
     }
     
-    public void UpdateMoveAnim(float currentSpeed, Vector3 movePos)
+    public void UpdateMoveAnim(float currentSpeed, Vector3 movePos, bool playerRawStop = false)
     {
+        if (playerRawStop)
+            currentSpeed = 0;
         _characterAnimator.SetFloat("Speed", currentSpeed);
         _characterAnimator.SetFloat("PosX", movePos.x);
         _characterAnimator.SetFloat("PosY", movePos.z);
