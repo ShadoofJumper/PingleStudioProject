@@ -45,8 +45,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 2, y: 1.105144, z: 2}
+  m_Center: {x: 0, y: 0.5768235, z: 0}
 --- !u!114 &8749836141130571207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3221be1799bf02445afa4c3bd83eba82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _effetcToSpawn: {fileID: 6142750030662910534, guid: edca2070ad1e9584c91eaa59f04a6297, type: 3}
+  _effetcToSpawn: {fileID: 1229922091078589149, guid: e601f694bde7700458b143bec22a680a, type: 3}
 --- !u!1 &8749836141453056660
 GameObject:
   m_ObjectHideFlags: 0
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 8749836141453056657}
   - component: {fileID: 8749836141453056658}
   m_Layer: 0
-  m_Name: Particle System
+  m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,7 +86,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8749836141453056660}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.47, z: 0}
+  m_LocalPosition: {x: 0, y: 0.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8749836141130571208}
@@ -228,7 +228,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.01
+      scalar: 0.04
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -4902,7 +4902,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bf5476fee17e6ac43a47eba4d19ff517, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bf5476fee17e6ac43a47eba4d19ff517, type: 3}
       propertyPath: m_LocalPosition.z

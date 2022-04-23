@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Animator _characterAnimator;
     [SerializeField] private Rigidbody _myRig;
     [SerializeField] private NavMeshAgent _navMeshAgent; 
+
     [Range(1,10)]
     [SerializeField] private float _searchRange = 10; 
     [Range(0.1f,10.0f)]
@@ -19,6 +20,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _runMoveSpeed = 3;
     [SerializeField] private float _walkMoveSpeed = 2;
 
+    [Header("Effects")]
+    [SerializeField] private ParticleSystem _swingEffect; 
+
+    
     private bool _playerInRange = false; 
     private bool _moveToTargetInProgress = false;
     private bool _playerInRangeAttack = false;
@@ -65,15 +70,19 @@ public class Enemy : MonoBehaviour
         {
             _attackInProgress = false;
             if (_attackLoop != null) _attackLoop.Kill();
-            if(_playerHitTween != null) _playerHitTween.Kill();
+            if (_playerHitTween != null)
+            {
+                _swingEffect.Stop();
+                _playerHitTween.Kill();
+            }
         }
     }
 
     private void RotateToTarget()
     {
-        Debug.Log("RotateToTarget");
-        Vector3 vectorToTarget = _player.transform.position - transform.position;
-        vectorToTarget.y = transform.position.y;
+        Vector3 target = _player.transform.position;
+        target.y = transform.position.y;
+        Vector3 vectorToTarget = target - transform.position;
         transform.rotation = Quaternion.LookRotation(vectorToTarget);
     }
     
@@ -82,12 +91,21 @@ public class Enemy : MonoBehaviour
         _attackInProgress = true;
         //play anim
         _characterAnimator.SetTrigger("Attack");
+        ShowAttackEffect();
         //play next attack
         _attackLoop = DOVirtual.DelayedCall(1.5f, Attack);
         //send hit call
         _playerHitTween = DOVirtual.DelayedCall(0.5f, () =>
         {
             _player.GetComponent<Player>().GetHit();
+        });
+    }
+
+    private void ShowAttackEffect()
+    {
+        DOVirtual.DelayedCall(0.4f,()=>
+        {
+            _swingEffect.Play();
         });
     }
     
