@@ -12,6 +12,8 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private Slider sliderFXVolume;
 
     private string sceneOnPlayName = "Game";
+    private string sceneOnReturnName = "MainMenu";
+
     static private float volumePower;
     static private float volumeFXPower;
 
@@ -25,12 +27,19 @@ public class MainMenuManager : MonoBehaviour
         SceneManager.LoadScene(sceneOnPlayName);
     }
     
+    public void ExitGameToMenu()
+    {
+        SceneManager.LoadScene(sceneOnReturnName);
+    }
+    
     private void LoadSettings()
     {
         volumePower = PlayerPrefs.GetFloat("VolumeMusic", 1);
         volumeFXPower = PlayerPrefs.GetFloat("VolumeFX", 1);
-        sliderVolume.value = volumePower;
-        sliderFXVolume.value = volumeFXPower;
+        if(sliderVolume!=null)
+            sliderVolume.value = volumePower;
+        if(sliderFXVolume!=null)
+            sliderFXVolume.value = volumeFXPower;
     }
 
 
@@ -74,6 +83,5 @@ public class MainMenuManager : MonoBehaviour
     {
         volumeFXPower = sliderFXVolume.value;
     }
-    
     
 }
